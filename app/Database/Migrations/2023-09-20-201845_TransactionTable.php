@@ -42,12 +42,8 @@ class TransactionTable extends Migration
             'date_transaction' => [
                 'type'           => 'DATETIME',
             ],
-            'created_at' => [
-                'type'           => 'DATETIME',
-            ],
-            'updated_at' => [
-                'type'           => 'DATETIME',
-            ],
+            'created_at datetime default current_timestamp',
+            'updated_at datetime default current_timestamp on update current_timestamp'
         ];
         $this->forge->addField($field);
         $this->forge->addKey('id', true);

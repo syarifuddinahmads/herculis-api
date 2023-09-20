@@ -47,12 +47,8 @@ class UsersTable extends Migration
                 'type'           => 'INT',
                 'unsigned'       => true,
             ],
-            'created_at' => [
-                'type'           => 'DATETIME',
-            ],
-            'updated_at' => [
-                'type'           => 'DATETIME',
-            ],
+            'created_at datetime default current_timestamp',
+            'updated_at datetime default current_timestamp on update current_timestamp'
         ];
         $this->forge->addField($field);
         $this->forge->addKey('id', true);
