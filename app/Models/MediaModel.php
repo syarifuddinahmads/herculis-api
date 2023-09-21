@@ -4,16 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Publisher extends Model
+class MediaModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'publisher';
+    protected $table            = 'media';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'address', 'no_telp', 'logo_media_id'];
+    protected $allowedFields    = ['type_media', 'url'];
 
     // Dates
     protected $useTimestamps = false;

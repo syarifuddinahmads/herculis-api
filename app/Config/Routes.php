@@ -31,6 +31,17 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
+// Api Mobile
+$routes->group('api', ["filter" => "cors"],  function ($routes) {
+    $routes->resource('user');
+    $routes->resource('publisher');
+    $routes->resource('subscription');
+    $routes->resource('transaction');
+    $routes->resource('newspaper');
+});
+
+
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

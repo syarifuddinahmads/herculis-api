@@ -4,24 +4,23 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class User extends Model
+class TransactionModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'users';
+    protected $table            = 'transactions';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'name',
-        'email',
-        'password',
-        'address',
-        'no_telp',
-        'nik_media_id',
-        'profile_media_id',
-        'user_type_id'
+        'transaction_code',
+        'user_id',
+        'publisher_id',
+        'total_price',
+        'payment_status',
+        'payment_id',
+        'date_transaction'
     ];
 
     // Dates

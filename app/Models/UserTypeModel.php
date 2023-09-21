@@ -4,16 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Subscription extends Model
+class UserTypeModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'subscriptions';
+    protected $table            = 'usertypes';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['newspaper_id', 'subscription_status', 'date_subscription'];
+    protected $allowedFields    = ['name'];
 
     // Dates
     protected $useTimestamps = false;

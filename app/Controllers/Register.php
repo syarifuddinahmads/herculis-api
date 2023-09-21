@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 
-class SubscriptionController extends BaseController
+class RegisterController extends BaseController
 {
     public function index()
     {

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TransactionDetail extends Model
+class TransactionDetailModel extends Model
 {
     protected $DBGroup          = 'default';
     protected $table            = 'transactiondetails';

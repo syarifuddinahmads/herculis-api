@@ -4,21 +4,16 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class Payment extends Model
+class SubscriptionModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'payments';
+    protected $table            = 'subscriptions';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [
-        'type_payment',
-        'payment_media_id',
-        'date_payment',
-        'status_payment'
-    ];
+    protected $allowedFields    = ['user_id', 'newspaper_id', 'subscription_status', 'date_subscription'];
 
     // Dates
     protected $useTimestamps = false;

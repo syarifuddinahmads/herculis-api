@@ -14,6 +14,10 @@ class SubscriptionTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
+            'user_id' => [
+                'type'           => 'INT',
+                'unsigned'       => true,
+            ],
             'newspaper_id' => [
                 'type'           => 'INT',
                 'unsigned'       => true,
