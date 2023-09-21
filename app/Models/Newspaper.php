@@ -13,7 +13,12 @@ class Newspaper extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = [
+        'name',
+        'publisher_id',
+        'price'
+    ];
+
 
     // Dates
     protected $useTimestamps = false;

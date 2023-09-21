@@ -13,7 +13,7 @@ class Subscription extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['newspaper_id', 'subscription_status', 'date_subscription'];
 
     // Dates
     protected $useTimestamps = false;

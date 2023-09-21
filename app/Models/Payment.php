@@ -13,7 +13,12 @@ class Payment extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = [
+        'type_payment',
+        'payment_media_id',
+        'date_payment',
+        'status_payment'
+    ];
 
     // Dates
     protected $useTimestamps = false;
