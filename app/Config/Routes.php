@@ -2,6 +2,8 @@
 
 namespace Config;
 
+use App\Controllers\NewspaperPrice;
+
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
 
@@ -38,6 +40,7 @@ $routes->group('api', ["filter" => "cors"],  function ($routes) {
     $routes->resource('subscription');
     $routes->resource('transaction');
     $routes->resource('newspaper');
+    $routes->get('newspaper-price', 'NewspaperPrice::index');
 });
 
 
