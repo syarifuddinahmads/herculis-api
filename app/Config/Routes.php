@@ -34,13 +34,27 @@ $routes->set404Override();
 $routes->get('/', 'Home::index');
 
 // Api Mobile
-$routes->group('api', ["filter" => "cors"],  function ($routes) {
-    $routes->resource('user');
-    $routes->resource('publisher');
-    $routes->resource('subscription');
-    $routes->resource('transaction');
-    $routes->resource('newspaper');
-    $routes->get('newspaper-price', 'NewspaperPrice::index');
+$routes->group('api/v1', ["filter" => 'cors'],  function ($routes) {
+    $routes->group('auth', [], function ($routes) {
+        $routes->post('login', 'Login::login');
+        $routes->post('register', 'Register::create');
+    });
+
+    $routes->group('', ["filter" => 'auth'],  function ($routes) {
+
+        $routes->resource('user');
+        $routes->resource('publisher');
+        $routes->resource('subscription');
+        $routes->resource('transaction');
+        $routes->resource('newspaper');
+
+        // News Paper Price
+        $routes->get('newspaper-price', 'NewspaperPrice::index');
+        $routes->get('newspaper-price/:num', 'NewspaperPrice::show');
+        $routes->post('newspaper-price', 'NewspaperPrice::index');
+        $routes->get('newspaper-price', 'NewspaperPrice::index');
+        $routes->get('newspaper-price', 'NewspaperPrice::index');
+    });
 });
 
 

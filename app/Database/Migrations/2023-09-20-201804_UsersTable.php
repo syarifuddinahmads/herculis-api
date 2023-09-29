@@ -28,10 +28,12 @@ class UsersTable extends Migration
             ],
             'address' => [
                 'type'           => 'TEXT',
+                'null' => true
             ],
             'no_telp' => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 25,
+                'null' => true
             ],
             'nik_media_id' => [
                 'type'           => 'INT',

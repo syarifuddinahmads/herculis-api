@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Libraries;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-class JWTLibrary{
+class JWTLibrary
+{
 
     private $key;
     private $iss;
@@ -13,13 +15,15 @@ class JWTLibrary{
     private $exp;
     private $nbf;
     private $jti;
-    public function __construct() {
-        
+    public function __construct()
+    {
+        $this->setConfig()->setExpiredDate();
     }
 
-    protected function setConfig() {
+    protected function setConfig()
+    {
         $this->key = getenv("jwt.secretkey");
-        $this->ttl = getenv("jwt.ttl")?getenv("jwt.ttl"):60;
+        $this->ttl = getenv("jwt.ttl") ? getenv("jwt.ttl") : 60;
         $this->iss = $this->getCurrentURL();
         $this->jti = $this->setTime(date("Y-m-d H:i:s"));
 
@@ -29,9 +33,9 @@ class JWTLibrary{
     protected function setExpiredDate()
     {
         $now = date("Y-m-d H:i:s");
-        $this->iat = $this->setTime( $now );
-        $this->nbf = $this->setTime( $now );
-        $this->exp = $this->setTime( date("Y-m-d H:i:s", strtotime("+".$this->ttl." MINUTES")) );
+        $this->iat = $this->setTime($now);
+        $this->nbf = $this->setTime($now);
+        $this->exp = $this->setTime(date("Y-m-d H:i:s", strtotime("+" . $this->ttl . " MINUTES")));
         return $this;
     }
 
@@ -50,38 +54,37 @@ class JWTLibrary{
 
     public function parse($token)
     {
-    
-        $bearerToken = $this->getBearerToken( $token );
-        if( !$bearerToken ) return ['success' => false, 'message' => 'Token Invalid'];
+
+        $bearerToken = $this->getBearerToken($token);
+        if (!$bearerToken) return ['success' => false, 'message' => 'Token Invalid'];
 
         try {
-            $decoded = JWT::decode($bearerToken, new Key($this->key, 'HS256') );
+            $decoded = JWT::decode($bearerToken, new Key($this->key, 'HS256'));
 
             return ['success' => true];
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
 
             return ['success' => false, 'message' => $e->getMessage()];
         }
-        
     }
 
     public function getBearerToken($token)
     {
         $token = explode(" ", $token);
-        if( !isset($token[0]) && $token[0] != 'Bearer' )
-        {
+        if (!isset($token[0]) && $token[0] != 'Bearer') {
             return false;
         }
 
         return $token[2];
     }
 
-    protected function getCurrentURL() {
-        return ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
+    protected function getCurrentURL()
+    {
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     }
 
-    protected function setTime($date) {
+    protected function setTime($date)
+    {
         return strtotime($date);
     }
-
 }
