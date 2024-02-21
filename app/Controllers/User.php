@@ -24,7 +24,7 @@ class User extends BaseController
             'password'     => 'required|min_length[6]',
             'name'           => 'required'
         ])) {
-            return $this->response->setJSON(['success' => false, 'data' => null, "message" => \Config\Services::validation()->getErrors()]);
+            return $this->fail(\Config\Services::validation()->getErrors());
         }
 
         $data = [
@@ -37,9 +37,7 @@ class User extends BaseController
         $response = [
             'status'   => 201,
             'error'    => null,
-            'messages' => [
-                'success' => 'Data produk berhasil ditambahkan.'
-            ]
+            'messages' => 'Data produk berhasil ditambahkan.'
         ];
         return $this->respondCreated($response);
     }

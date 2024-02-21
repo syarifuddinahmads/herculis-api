@@ -10,24 +10,30 @@ class UserTableSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'User 1',
-                'password' => '123456',
-                'email' => '08123456789'
+                'name' => 'John Doe',
+                'email' => 'john@example.com',
+                'password' => password_hash('password123', PASSWORD_DEFAULT),
+                'address' => '123 Main St, Anytown, USA',
+                'no_telp' => '123-456-7890',
+                'nik_media_id' => 1,
+                'profile_media_id' => 2,
+                'user_type_id' => 1,
             ],
             [
-                'name' => 'User 2',
-                'password' => '123456',
-                'email' => '08123456789'
+                'name' => 'Jane Doe',
+                'email' => 'jane@example.com',
+                'password' => password_hash('password456', PASSWORD_DEFAULT),
+                'address' => '456 Elm St, Anytown, USA',
+                'no_telp' => '987-654-3210',
+                'nik_media_id' => 3,
+                'profile_media_id' => 4,
+                'user_type_id' => 2,
             ],
-            [
-                'name' => 'User 3',
-                'password' => '123456',
-                'email' => '08123456789'
-            ]
+            // Tambahkan data lainnya sesuai kebutuhan
         ];
 
         foreach ($data as $i) {
-            $this->db->table('publisher')->insert($i);
+            $this->db->table('users')->insert($i);
         }
     }
 }
