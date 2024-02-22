@@ -4,19 +4,18 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
-use App\Models\UserModel;
-use CodeIgniter\API\ResponseTrait;
+use App\Models\UserTypeModel;
 use Exception;
 
-class User extends BaseController
+class UserType extends BaseController
 {
     use ResponseAPIHelper;
     public function index()
     {
        try{
-        $model = new UserModel();
-        $users = $model->orderBy('id', 'DESC')->findAll();
-        return $this->sendSuccess($users,'',200);
+        $model = new UserTypeModel();
+        $data = $model->orderBy('id', 'DESC')->findAll();
+        return $this->sendSuccess($data,'',200);
 
        }catch(Exception $ex){
         return $this->sendError($ex->getMessage());
@@ -26,8 +25,6 @@ class User extends BaseController
     public function create()
     {
         if (!$this->validate([
-            'email'     => 'required|is_unique[users.email]',
-            'password'     => 'required|min_length[6]',
             'name'           => 'required'
         ])) {
             return $this->sendError(\Config\Services::validation()->getErrors());
@@ -35,11 +32,9 @@ class User extends BaseController
 
         try{
             $data = [
-                'email' => $this->request->getVar('email'),
-                'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
             ];
-            $model = new UserModel();
+            $model = new UserTypeModel();
             $model->insert($data);
             return $this->sendSuccess(null,'Data produk berhasil ditambahkan.',201);
         }catch(Exception $ex){
@@ -50,7 +45,7 @@ class User extends BaseController
     public function show($id = null)
     {
         try{
-            $model = new UserModel();
+            $model = new UserTypeModel();
             $data = $model->where('id', $id)->first();
             if ($data) {
                 return $this->sendSuccess($data);
@@ -65,15 +60,13 @@ class User extends BaseController
     public function update($id = null)
     {
         try{
-            $model = new UserModel();
+            $model = new UserTypeModel();
             $id = $this->request->getVar('id');
             $data = [
-                'email' => $this->request->getVar('email'),
-                'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
             ];
             $model->update($id, $data);
-            return $this->sendSuccess(null,'Data user berhasil diupdate.',201);
+            return $this->sendSuccess(null,'Data user berhasil diupdate.',200);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
         }
@@ -81,7 +74,7 @@ class User extends BaseController
     
     public function delete($id = null)
     {
-        $model = new UserModel();
+        $model = new UserTypeModel();
         $data = $model->where('id', $id)->delete($id);
         if ($data) {
             $model->delete($id);

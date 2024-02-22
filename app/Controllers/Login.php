@@ -31,7 +31,7 @@ class Login extends BaseController
                     'user'=>$user
                 ];
 
-                return $this->sendSuccess($data,'Login Berhasil !');
+                return $this->sendSuccess($data,'Login Berhasil !',200);
             }else{
                 return $this->sendError('Login Gagal, Email atau password salah !',null);
             }
