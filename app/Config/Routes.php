@@ -45,17 +45,12 @@ $routes->group('api/v1', ["filter" => 'cors'],  function ($routes) {
     $routes->group('', ["filter" => 'auth'],  function ($routes) {
 
         $routes->resource('user');
+        $routes->resource('usertype');
         $routes->resource('publisher');
         $routes->resource('subscription');
         $routes->resource('transaction');
         $routes->resource('newspaper');
-
-        // News Paper Price
-        $routes->get('newspaper-price', 'NewspaperPrice::index');
-        $routes->get('newspaper-price/:num', 'NewspaperPrice::show');
-        $routes->post('newspaper-price', 'NewspaperPrice::index');
-        $routes->get('newspaper-price', 'NewspaperPrice::index');
-        $routes->get('newspaper-price', 'NewspaperPrice::index');
+        $routes->resource('newspaperprice');
     });
 });
 

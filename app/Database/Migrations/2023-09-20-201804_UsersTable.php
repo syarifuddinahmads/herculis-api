@@ -35,15 +35,13 @@ class UsersTable extends Migration
                 'constraint'     => 25,
                 'null' => true
             ],
-            'nik_media_id' => [
-                'type'           => 'INT',
-                'unsigned'       => true,
-                'null'           => true,
+            'nik_image' => [
+                'type'           => 'TEXT',
+                'null' => true
             ],
-            'profile_media_id' => [
-                'type'           => 'INT',
-                'unsigned'       => true,
-                'null'           => true,
+            'profile_image' => [
+                'type'           => 'TEXT',
+                'null' => true
             ],
             'user_type_id' => [
                 'type'           => 'INT',

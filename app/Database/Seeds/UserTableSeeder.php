@@ -15,8 +15,8 @@ class UserTableSeeder extends Seeder
                 'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'address' => '123 Main St, Anytown, USA',
                 'no_telp' => '123-456-7890',
-                'nik_media_id' => 1,
-                'profile_media_id' => 2,
+                'nik_image' => '-',
+                'profile_image' => '-',
                 'user_type_id' => 1,
             ],
             [
@@ -25,8 +25,8 @@ class UserTableSeeder extends Seeder
                 'password' => password_hash('password456', PASSWORD_DEFAULT),
                 'address' => '456 Elm St, Anytown, USA',
                 'no_telp' => '987-654-3210',
-                'nik_media_id' => 3,
-                'profile_media_id' => 4,
+                'nik_image' => '-',
+                'profile_image' => '-',
                 'user_type_id' => 2,
             ],
             // Tambahkan data lainnya sesuai kebutuhan
