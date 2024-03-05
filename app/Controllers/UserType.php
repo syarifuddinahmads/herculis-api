@@ -24,19 +24,13 @@ class UserType extends BaseController
 
     public function create()
     {
-        if (!$this->validate([
-            'name'           => 'required'
-        ])) {
-            return $this->sendError(\Config\Services::validation()->getErrors());
-        }
-
         try{
             $data = [
                 'name' => $this->request->getVar('name'),
             ];
             $model = new UserTypeModel();
             $model->insert($data);
-            return $this->sendSuccess(null,'Data produk berhasil ditambahkan.',201);
+            return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
         }
@@ -61,12 +55,11 @@ class UserType extends BaseController
     {
         try{
             $model = new UserTypeModel();
-            $id = $this->request->getVar('id');
             $data = [
                 'name' => $this->request->getVar('name'),
             ];
             $model->update($id, $data);
-            return $this->sendSuccess(null,'Data user berhasil diupdate.',200);
+            return $this->sendSuccess(null,'Data berhasil diupdate.',200);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
         }
@@ -74,13 +67,17 @@ class UserType extends BaseController
     
     public function delete($id = null)
     {
-        $model = new UserTypeModel();
-        $data = $model->where('id', $id)->delete($id);
-        if ($data) {
-            $model->delete($id);
-            return $this->sendSuccess(null,'Data user berhasil dihapus !',200);
-        } else {
-            return $this->sendError('Data tidak ditemukan.');
+        try{
+            $model = new UserTypeModel();
+            $data = $model->where('id', $id)->first();
+            if (!empty($data)) {
+                $model->where('id', $id)->delete();
+                return $this->sendSuccess(null,'Data berhasil dihapus !',200);
+            } else {
+                return $this->sendError('Data tidak ditemukan.');
+            }
+        }catch(Exception $ex){
+            return $this->sendError($ex->getMessage());
         }
     }
 }

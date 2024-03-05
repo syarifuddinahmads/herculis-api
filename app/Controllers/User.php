@@ -14,25 +14,16 @@ class User extends BaseController
     public function index()
     {
        try{
-        $model = new UserModel();
-        $users = $model->orderBy('id', 'DESC')->findAll();
-        return $this->sendSuccess($users,'',200);
-
+            $model = new UserModel();
+            $users = $model->orderBy('id', 'DESC')->findAll();
+            return $this->sendSuccess($users,'',200);
        }catch(Exception $ex){
-        return $this->sendError($ex->getMessage());
+            return $this->sendError($ex->getMessage());
        }
     }
 
     public function create()
     {
-        if (!$this->validate([
-            'email'     => 'required|is_unique[users.email]',
-            'password'     => 'required|min_length[6]',
-            'name'           => 'required'
-        ])) {
-            return $this->sendError(\Config\Services::validation()->getErrors());
-        }
-
         try{
             $data = [
                 'email' => $this->request->getVar('email'),
@@ -41,7 +32,7 @@ class User extends BaseController
             ];
             $model = new UserModel();
             $model->insert($data);
-            return $this->sendSuccess(null,'Data produk berhasil ditambahkan.',201);
+            return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
         }
@@ -66,14 +57,14 @@ class User extends BaseController
     {
         try{
             $model = new UserModel();
-            $id = $this->request->getVar('id');
             $data = [
                 'email' => $this->request->getVar('email'),
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
+                'no_telp' => $this->request->getVar('no_telp'),
             ];
             $model->update($id, $data);
-            return $this->sendSuccess(null,'Data user berhasil diupdate.',201);
+            return $this->sendSuccess(null,'Data berhasil diupdate.',201);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
         }
@@ -81,13 +72,17 @@ class User extends BaseController
     
     public function delete($id = null)
     {
-        $model = new UserModel();
-        $data = $model->where('id', $id)->delete($id);
-        if ($data) {
-            $model->delete($id);
-            return $this->sendSuccess(null,'Data user berhasil dihapus !',200);
-        } else {
-            return $this->sendError('Data tidak ditemukan.');
+        try{
+            $model = new UserModel();
+            $data = $model->where('id', $id)->first();
+            if (!empty($data)) {
+                $model->where('id', $id)->delete();
+                return $this->sendSuccess(null,'Data berhasil dihapus !',200);
+            } else {
+                return $this->sendError('Data tidak ditemukan.');
+            }
+        }catch(Exception $ex){
+            return $this->sendError($ex->getMessage());
         }
     }
 }
