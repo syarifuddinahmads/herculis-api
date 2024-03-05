@@ -13,7 +13,7 @@ class NewspaperPriceModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['user_id', 'newspaper_id', 'price_sale'];
+    protected $allowedFields    = ['user_id', 'newspaper_id', 'price_sale','price'];
 
     // Dates
     protected $useTimestamps = false;

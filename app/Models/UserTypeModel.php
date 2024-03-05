@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class UserTypeModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'usertypes';
+    protected $table            = 'user_type';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';

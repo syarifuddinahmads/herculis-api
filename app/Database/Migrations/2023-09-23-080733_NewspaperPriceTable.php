@@ -23,6 +23,10 @@ class NewspaperPriceTable extends Migration
                 'type'           => 'INT',
                 'unsigned'       => true,
             ],
+            'price' => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 255,
+            ],
             'price_sale' => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 255,
