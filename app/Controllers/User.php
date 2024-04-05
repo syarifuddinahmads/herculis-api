@@ -5,17 +5,29 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
 use App\Models\UserModel;
+use App\Models\UserTypeModel;
 use CodeIgniter\API\ResponseTrait;
 use Exception;
 
 class User extends BaseController
 {
+    private $userModel;
+    private $userTypeModel;
     use ResponseAPIHelper;
+
+    function __construct()
+    {
+        $this->userModel = new UserModel();
+        $this->userTypeModel = new UserTypeModel();
+    }
     public function index()
     {
        try{
-            $model = new UserModel();
-            $users = $model->orderBy('id', 'DESC')->findAll();
+            $users = $this->userModel->orderBy('id', 'DESC')->findAll();
+            foreach ($users as &$user) {
+                $userType = $this->userTypeModel->table('user_type')->where('id', $user['user_type_id'])->get()->getRow();
+                $user['user_type'] = $userType;
+            }
             return $this->sendSuccess($users,'',200);
        }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
@@ -30,8 +42,7 @@ class User extends BaseController
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
             ];
-            $model = new UserModel();
-            $model->insert($data);
+            $this->userModel->insert($data);
             return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
@@ -41,8 +52,11 @@ class User extends BaseController
     public function show($id = null)
     {
         try{
-            $model = new UserModel();
-            $data = $model->where('id', $id)->first();
+            $data = $this->userModel->where('id', $id)->first();
+            $userType = $this->userTypeModel->where('id', $data['user_type_id'])->first();
+
+            $data['user_type'] = $userType;
+
             if ($data) {
                 return $this->sendSuccess($data);
             } else {
@@ -56,14 +70,13 @@ class User extends BaseController
     public function update($id = null)
     {
         try{
-            $model = new UserModel();
             $data = [
                 'email' => $this->request->getVar('email'),
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
                 'no_telp' => $this->request->getVar('no_telp'),
             ];
-            $model->update($id, $data);
+            $this->userModel->update($id, $data);
             return $this->sendSuccess(null,'Data berhasil diupdate.',201);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
@@ -73,10 +86,9 @@ class User extends BaseController
     public function delete($id = null)
     {
         try{
-            $model = new UserModel();
-            $data = $model->where('id', $id)->first();
+            $data = $this->userModel->where('id', $id)->first();
             if (!empty($data)) {
-                $model->where('id', $id)->delete();
+                $this->userModel->where('id', $id)->delete();
                 return $this->sendSuccess(null,'Data berhasil dihapus !',200);
             } else {
                 return $this->sendError('Data tidak ditemukan.');
