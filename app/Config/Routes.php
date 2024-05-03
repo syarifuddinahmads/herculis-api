@@ -48,9 +48,9 @@ $routes->group('api/v1', ["filter" => 'cors'],  function ($routes) {
         $routes->resource('usertype');
         $routes->resource('publisher');
         $routes->resource('subscription');
-        $routes->resource('transaction');
         $routes->resource('newspaper');
         $routes->resource('newspaperprice');
+        $routes->resource('transaction');      
     });
 });
 
