@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\SubscriptionModel;
 use CodeIgniter\API\ResponseTrait;
 
-class SubscriptionController extends BaseController
+class Subscription extends BaseController
 {
     use ResponseTrait;
     // all users
