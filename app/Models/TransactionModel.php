@@ -49,13 +49,13 @@ class TransactionModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getTransactionDetails($transactionId)
+    public function getTransactionDetails($id)
     {
         return $this->db->table('transaction_detail')
-            ->where('transaction_id', $transactionId)
+            ->where('transaction_id', $id)
             ->get()->getResultArray();
     }
-
+    
     public function last() {
         $builder = $this->db->table('transaction');
         $builder->select('id, transaction_code');

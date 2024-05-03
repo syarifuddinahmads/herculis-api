@@ -33,8 +33,12 @@ class Transaction extends BaseController
     }
 
     public function show($id)
-    {
-        $transaction = $this->transactionModel->show($id);
+    {   
+        $transactionModel = new TransactionModel(); 
+        $transaction = $transactionModel->show($id);
+        $transactionDetails = $transactionModel->getTransactionDetails($id);
+
+        $transaction['details'] = $transactionDetails;
         return $this->sendSuccess($transaction,'',200);
     }
 
