@@ -10,79 +10,79 @@ use Exception;
 
 class Publisher extends BaseController
 {
+    private $publisherModel;
     use ResponseAPIHelper;
-    
+
+    function __construct()
+    {
+        $this->publisherModel = new PublisherModel();
+    }
+
     public function index()
     {
-        try{
-            $model = new PublisherModel();
-            $data = $model->orderBy('id', 'DESC')->findAll();
-            return $this->sendSuccess($data,'',200);
-    
-        }catch(Exception $ex){
+        try {
+            $data = $this->publisherModel->orderBy('id', 'DESC')->findAll();
+            return $this->sendSuccess($data, '', 200);
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
         }
     }
-    
+
     public function create()
     {
-        try{
+        try {
             $data = [
                 'name' => $this->request->getVar('name'),
                 'address'  => $this->request->getVar('address'),
                 'no_telp'  => $this->request->getVar('no_telp'),
             ];
 
-            $model = new PublisherModel();
-            $model->insert($data);
+            $this->publisherModel->insert($data);
 
-            return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
-        }catch(Exception $ex){
+            return $this->sendSuccess(null, 'Data berhasil ditambahkan.', 201);
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
         }
     }
-   
+
     public function show($id = null)
     {
-        $model = new PublisherModel();
-        $data = $model->where('id', $id)->first();
+        $data = $this->publisherModel->where('id', $id)->first();
         if ($data) {
             return $this->sendSuccess($data);
         } else {
             return $this->sendError('Data tidak ditemukan.');
         }
     }
-    
+
     public function update($id = null)
     {
-        try{
+        try {
 
-            $model = new PublisherModel();
             $data = [
                 'name' => $this->request->getVar('name'),
                 'address'  => $this->request->getVar('address'),
                 'no_telp'  => $this->request->getVar('no_telp'),
             ];
-            $model->update($id, $data);
+            $this->publisherModel->update($id, $data);
 
-            return $this->sendSuccess(null,'Data berhasil diupdate.',200);
-        }catch(Exception $ex){
+            return $this->sendSuccess(null, 'Data berhasil diupdate.', 200);
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
         }
     }
-    
+
     public function delete($id = null)
     {
-        try{
-            $model = new PublisherModel();
-            $data = $model->where('id', $id)->first();
+        try {
+            $data = $this->publisherModel->where('id', $id)->first();
             if (!empty($data)) {
-                $model->where('id', $id)->delete();
-                return $this->sendSuccess(null,'Data berhasil dihapus !',200);
+                $this->publisherModel->where('id', $id)->delete();
+                return $this->sendSuccess(null, 'Data berhasil dihapus !', 200);
             } else {
                 return $this->sendError('Data tidak ditemukan.');
             }
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
         }
     }

@@ -4,17 +4,25 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
+use App\Models\UserModel;
 use App\Models\UserTypeModel;
 use Exception;
 
 class UserType extends BaseController
-{
+{   private $userTypeModel;
+    private $userModel;
     use ResponseAPIHelper;
+
+    function __construct()
+    {
+        $this->userTypeModel = new UserTypeModel();
+        $this->userModel = new UserModel();
+    }
+
     public function index()
     {
        try{
-        $model = new UserTypeModel();
-        $data = $model->orderBy('id', 'DESC')->findAll();
+        $data = $this->userTypeModel->orderBy('id', 'DESC')->findAll();
         return $this->sendSuccess($data,'',200);
 
        }catch(Exception $ex){
@@ -28,8 +36,7 @@ class UserType extends BaseController
             $data = [
                 'name' => $this->request->getVar('name'),
             ];
-            $model = new UserTypeModel();
-            $model->insert($data);
+            $this->userTypeModel->insert($data);
             return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
@@ -39,8 +46,7 @@ class UserType extends BaseController
     public function show($id = null)
     {
         try{
-            $model = new UserTypeModel();
-            $data = $model->where('id', $id)->first();
+            $data = $this->userTypeModel->where('id', $id)->first();
             if ($data) {
                 return $this->sendSuccess($data);
             } else {
@@ -54,11 +60,10 @@ class UserType extends BaseController
     public function update($id = null)
     {
         try{
-            $model = new UserTypeModel();
             $data = [
                 'name' => $this->request->getVar('name'),
             ];
-            $model->update($id, $data);
+            $this->userTypeModel->update($id, $data);
             return $this->sendSuccess(null,'Data berhasil diupdate.',200);
         }catch(Exception $ex){
             return $this->sendError($ex->getMessage());
@@ -68,10 +73,9 @@ class UserType extends BaseController
     public function delete($id = null)
     {
         try{
-            $model = new UserTypeModel();
-            $data = $model->where('id', $id)->first();
+            $data = $this->userTypeModel->where('id', $id)->first();
             if (!empty($data)) {
-                $model->where('id', $id)->delete();
+                $this->userTypeModel->where('id', $id)->delete();
                 return $this->sendSuccess(null,'Data berhasil dihapus !',200);
             } else {
                 return $this->sendError('Data tidak ditemukan.');
