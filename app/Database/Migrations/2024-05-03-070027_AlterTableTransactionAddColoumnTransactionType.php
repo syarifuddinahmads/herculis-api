@@ -19,6 +19,10 @@ class AlterTableTransactionAddColoumnTransactionType extends Migration
                 'is_retur' => [
                     'type' => 'boolean',
                     'after' => 'payment_type'
+                ],
+                'total_price_after_retur' => [
+                    'type' => 'BIGINT',
+                    'after' => 'is_retur'
                 ],                
             ]);
         }
@@ -28,5 +32,6 @@ class AlterTableTransactionAddColoumnTransactionType extends Migration
     {
         $this->forge->dropColumn('transaction', 'payment_type');
         $this->forge->dropColumn('transaction', 'is_retur');
+        $this->forge->dropColumn('transaction', 'total_price_after_retur');
     }
 }

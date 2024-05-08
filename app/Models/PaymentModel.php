@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class PaymentModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'payments';
+    protected $table            = 'payment';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -17,7 +17,9 @@ class PaymentModel extends Model
         'type_payment',
         'payment_media_id',
         'date_payment',
-        'status_payment'
+        'status_payment',
+        'note',
+        'file_url',
     ];
 
     // Dates
