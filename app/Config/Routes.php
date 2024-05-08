@@ -50,7 +50,13 @@ $routes->group('api/v1', ["filter" => 'cors'],  function ($routes) {
         $routes->resource('subscription');
         $routes->resource('newspaper');
         $routes->resource('newspaperprice');
-        $routes->resource('transaction');      
+        
+        $routes->group('transaction', [], function ($routes) {
+            $routes->post('index', 'Transaction::index');
+            $routes->post('show/{id}', 'Transaction::show');
+            $routes->post('create','Transaction::create');
+            $routes->post('payment','Transaction::payment');
+        });
     });
 });
 
