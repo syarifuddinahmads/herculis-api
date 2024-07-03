@@ -10,8 +10,8 @@ class UserTableSeeder extends Seeder
     {
         $data = [
             [
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
+                'name' => 'Admin',
+                'email' => 'admin@mail.com',
                 'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'address' => '123 Main St, Anytown, USA',
                 'no_telp' => '123-456-7890',
@@ -20,14 +20,44 @@ class UserTableSeeder extends Seeder
                 'user_type_id' => 1,
             ],
             [
-                'name' => 'Jane Doe',
-                'email' => 'jane@example.com',
+                'name' => 'Staff Pembelian',
+                'email' => 'staff-buy@mail.com',
                 'password' => password_hash('password456', PASSWORD_DEFAULT),
                 'address' => '456 Elm St, Anytown, USA',
                 'no_telp' => '987-654-3210',
                 'nik_image' => '-',
                 'profile_image' => '-',
                 'user_type_id' => 2,
+            ],
+            [
+                'name' => 'Staff Penjualan',
+                'email' => 'staff-sales@mail.com',
+                'password' => password_hash('password456', PASSWORD_DEFAULT),
+                'address' => '456 Elm St, Anytown, USA',
+                'no_telp' => '987-654-3210',
+                'nik_image' => '-',
+                'profile_image' => '-',
+                'user_type_id' => 3,
+            ],
+            [
+                'name' => 'Asongan',
+                'email' => 'asongan@mail.com',
+                'password' => password_hash('password456', PASSWORD_DEFAULT),
+                'address' => '456 Elm St, Anytown, USA',
+                'no_telp' => '987-654-3210',
+                'nik_image' => '-',
+                'profile_image' => '-',
+                'user_type_id' => 4,
+            ],
+            [
+                'name' => 'Customer',
+                'email' => 'customer@mail.com',
+                'password' => password_hash('password456', PASSWORD_DEFAULT),
+                'address' => '456 Elm St, Anytown, USA',
+                'no_telp' => '987-654-3210',
+                'nik_image' => '-',
+                'profile_image' => '-',
+                'user_type_id' => 4,
             ],
             // Tambahkan data lainnya sesuai kebutuhan
         ];

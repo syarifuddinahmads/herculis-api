@@ -6,17 +6,17 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 trait ResponseAPIHelper
 {
-    public static function sendSuccess($data = null, string $message = 'Success', int $statusCode = ResponseInterface::HTTP_OK)
+    public static function sendSuccess($data = null,  $message = 'Success',  $statusCode = ResponseInterface::HTTP_OK)
     {
         return self::sendResponse(true, $message, $data, $statusCode);
     }
 
-    public static function sendError($message = 'Error', $data = null, int $statusCode = ResponseInterface::HTTP_BAD_REQUEST)
+    public static function sendError($message = 'Error', $data = null,  $statusCode = ResponseInterface::HTTP_BAD_REQUEST)
     {
         return self::sendResponse(false, $message, $data, $statusCode);
     }
 
-    protected static function sendResponse(bool $success, string $message, $data = null, int $statusCode)
+    protected static function sendResponse( $success,  $message, $data = null,  $statusCode=null)
     {
         $response = [
             'success' => $success,
