@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class TransactionDetailTable extends Migration
+class ReturDetailTable extends Migration
 {
     public function up()
     {
@@ -14,7 +14,7 @@ class TransactionDetailTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'transaction_id' => [
+            'retur_id' => [
                 'type'           => 'INT',
                 'unsigned'       => true,
             ],
@@ -35,11 +35,11 @@ class TransactionDetailTable extends Migration
         ];
         $this->forge->addField($field);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('transaction_detail');
+        $this->forge->createTable('retur_detail');
     }
 
     public function down()
     {
-        $this->forge->dropTable('transaction_detail');
+        $this->forge->dropTable('retur_detail');
     }
 }

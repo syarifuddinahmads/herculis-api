@@ -2,29 +2,32 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
 use CodeIgniter\Database\BaseBuilder;
+use CodeIgniter\Model;
 
-class TransactionModel extends Model
+class ReturModel extends Model
 {
-    protected $DBGroup          = 'default';
-    protected $table            = 'transaction';
+    protected $table            = 'retur';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'transaction_code',
+        'retur_code',
         'user_id',
         'staff_id',
+        'retur_id',
         'publisher_id',
         'total_price',
-        'payment_status',
-        'payment_id',
-        'date_transaction',
-        'type_transaction'
+        'date_retur',
     ];
+
+    protected bool $allowEmptyInserts = false;
+    protected bool $updateOnlyChanged = true;
+
+    protected array $casts = [];
+    protected array $castHandlers = [];
 
     // Dates
     protected $useTimestamps = false;
@@ -50,34 +53,34 @@ class TransactionModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getTransactionDetails($id)
+    public function getReturDetails($id)
     {
-        return $this->db->table('transaction_detail')
-            ->where('transaction_id', $id)
+        return $this->db->table('retur_detail')
+            ->where('retur_id', $id)
             ->get()->getResultArray();
     }
     
     public function last() {
-        $builder = $this->db->table('transaction');
-        $builder->select('id, transaction_code');
+        $builder = $this->db->table('retur');
+        $builder->select('id, retur_code');
         $builder->whereIn('id', function(BaseBuilder $builder) {
             $builder->select('MAX(id)', false)
-                    ->from('transaction');
+                    ->from('retur');
         });
         $query = $builder->get()->getRow();
         return $query;
     }
 
-    public function index($fromDate = null, $toDate = null, $transactionType = null, $paymentStatus = null)
+    public function index($fromDate = null, $toDate = null, $returType = null, $paymentStatus = null)
     {
-        $builder = $this->db->table('transaction');
+        $builder = $this->db->table('retur');
 
         if ($fromDate !== null && $toDate !== null) {
-            $builder->where('date_transaction >=', $fromDate)
-                    ->where('date_transaction <=', $toDate);
+            $builder->where('date_retur >=', $fromDate)
+                    ->where('date_retur <=', $toDate);
         }
-        if ($transactionType !== null) {
-            $builder->where('transaction_type', $transactionType);
+        if ($returType !== null) {
+            $builder->where('retur_type', $returType);
         }
         if ($paymentStatus !== null) {
             $builder->where('payment_status', $paymentStatus);

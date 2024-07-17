@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
+use CodeIgniter\Log\Logger;
 use Exception;
 
 class Transaction extends BaseController
@@ -55,9 +56,7 @@ class Transaction extends BaseController
                 'publisher_id' => $this->request->getVar('publisher_id'),
                 'total_price' => $this->request->getVar('total_price'),
                 'payment_status' => "unpaid",
-                'payment_id' => $this->request->getVar('payment_id'),
-                'payment_type' => $this->request->getVar('payment_type'),
-                'date_transaction' => $this->request->getVar('date_transaction'),
+                'type_transaction'=> $this->request->getVar('type_transaction'),
             ];
 
             $transaction = new TransactionModel();
@@ -94,7 +93,7 @@ class Transaction extends BaseController
         $transactionDate = date('ymd');
         $lastTransactionCode = $this->getLastTransactionCode();
 
-        return 'inv/' . $transactionDate . '/' . $lastTransactionCode;
+        return 'INV/' . $transactionDate . '/' . $lastTransactionCode;
     }
 
     private function getLastTransactionCode()

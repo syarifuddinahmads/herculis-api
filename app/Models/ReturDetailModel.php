@@ -4,21 +4,26 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class TransactionDetailModel extends Model
+class ReturDetailModel extends Model
 {
-    protected $DBGroup          = 'default';
-    protected $table            = 'transaction_detail';
+    protected $table            = 'retur_detail';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'transaction_id',
+        'retur_id',
         'newspaper_id',
         'price',
         'quantity'
     ];
+
+    protected bool $allowEmptyInserts = false;
+    protected bool $updateOnlyChanged = true;
+
+    protected array $casts = [];
+    protected array $castHandlers = [];
 
     // Dates
     protected $useTimestamps = false;
