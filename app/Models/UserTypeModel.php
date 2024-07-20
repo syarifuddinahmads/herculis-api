@@ -38,4 +38,9 @@ class UserTypeModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function show($id)
+    {
+        return $this->find($id);
+    }
 }

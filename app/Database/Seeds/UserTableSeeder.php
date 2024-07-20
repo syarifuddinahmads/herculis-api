@@ -57,7 +57,7 @@ class UserTableSeeder extends Seeder
                 'no_telp' => '987-654-3210',
                 'nik_image' => '-',
                 'profile_image' => '-',
-                'user_type_id' => 4,
+                'user_type_id' => 5,
             ],
             // Tambahkan data lainnya sesuai kebutuhan
         ];
