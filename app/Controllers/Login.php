@@ -30,7 +30,9 @@ class Login extends BaseController
                     $jwt = new JWTLibrary;
                     $token = $jwt->token();
 
+                   
                     $userType = $this->userTypeModel->show($user['user_type_id']);
+                    $user['user_type'] = $userType;
 
                     $data = [
                         'token' => $token,

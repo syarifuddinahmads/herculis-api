@@ -39,8 +39,13 @@ class User extends BaseController
         try{
             $data = [
                 'email' => $this->request->getVar('email'),
-                'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
+                'user_type_id'=>$this->request->getVar('user_type_id'),
+                'no_telp'=>$this->request->getVar('no_telp'),
+                'address'=>$this->request->getVar('address'),
+                'nik_image'=>'-',
+                'profile_image'=>'-',
             ];
             $this->userModel->insert($data);
             return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
@@ -74,7 +79,11 @@ class User extends BaseController
                 'email' => $this->request->getVar('email'),
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
-                'no_telp' => $this->request->getVar('no_telp'),
+                'user_type_id'=>$this->request->getVar('user_type_id'),
+                'no_telp'=>$this->request->getVar('no_telp'),
+                'address'=>$this->request->getVar('address'),
+                'nik_image'=>'-',
+                'profile_image'=>'-',
             ];
             $this->userModel->update($id, $data);
             return $this->sendSuccess(null,'Data berhasil diupdate.',201);
