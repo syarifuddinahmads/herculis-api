@@ -44,13 +44,11 @@ class User extends BaseController
                 'user_type_id'=>$this->request->getVar('user_type_id'),
                 'no_telp'=>$this->request->getVar('no_telp'),
                 'address'=>$this->request->getVar('address'),
-                'nik_image'=>'-',
-                'profile_image'=>'-',
             ];
             $this->userModel->insert($data);
             return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
         }catch(Exception $ex){
-            return $this->sendError($ex->getMessage());
+            return $this->sendError($ex->getMessage(),null,500);
         }
     }
 
@@ -82,8 +80,8 @@ class User extends BaseController
                 'user_type_id'=>$this->request->getVar('user_type_id'),
                 'no_telp'=>$this->request->getVar('no_telp'),
                 'address'=>$this->request->getVar('address'),
-                'nik_image'=>'-',
-                'profile_image'=>'-',
+                'nik_image'=>$this->request->getVar('nik_image'),
+                'profile_image'=>$this->request->getVar('profile_image'),
             ];
             $this->userModel->update($id, $data);
             return $this->sendSuccess(null,'Data berhasil diupdate.',201);
