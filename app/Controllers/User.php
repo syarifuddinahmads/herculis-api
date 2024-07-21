@@ -25,7 +25,7 @@ class User extends BaseController
        try{
             $users = $this->userModel->orderBy('id', 'DESC')->findAll();
             foreach ($users as &$user) {
-                $userType = $this->userTypeModel->table('user_type')->where('id', $user['user_type_id'])->get()->getRow();
+                $userType = $this->userTypeModel->show($user['user_type_id']);
                 $user['user_type'] = $userType;
             }
             return $this->sendSuccess($users,'',200);
