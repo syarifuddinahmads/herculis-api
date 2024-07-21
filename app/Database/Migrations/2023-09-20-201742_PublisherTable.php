@@ -25,10 +25,6 @@ class PublisherTable extends Migration
                 'type'           => 'VARCHAR',
                 'constraint'     => 25,
             ],
-            'image' => [
-                'type'           => 'TEXT',
-                'null'  => true
-            ],
             'created_at datetime default current_timestamp',
             'updated_at datetime default current_timestamp on update current_timestamp'
         ];

@@ -13,7 +13,7 @@ class PublisherModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'address', 'no_telp', 'logo_media_id'];
+    protected $allowedFields    = ['name', 'address', 'no_telp'];
 
     // Dates
     protected $useTimestamps = false;
