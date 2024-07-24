@@ -4,8 +4,11 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
+use App\Models\NewspaperModel;
+use App\Models\PublisherModel;
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
+use App\Models\UserModel;
 use CodeIgniter\Log\Logger;
 use Exception;
 
@@ -13,11 +16,17 @@ class Transaction extends BaseController
 {   
     use ResponseAPIHelper;
 
+    private $publisherModel;
+    private $userModel;
+    private $newspaperModel;
     protected $db; // Define the property
 
     public function __construct()
     {
         $this->db = \Config\Database::connect(); // Load the database library manually
+        $this->userModel= new UserModel();
+        $this->publisherModel = new PublisherModel();
+        $this->newspaperModel = new NewspaperModel();
     }
     
     public function index()
@@ -30,6 +39,12 @@ class Transaction extends BaseController
         $transactionModel = new TransactionModel(); 
         $transactions = $transactionModel->index($fromDate, $toDate, $transactionType, $paymentStatus);
 
+        foreach($transactions as &$transaction){
+            $transaction['publisher'] = !empty($transaction['publisher_id']) ? $this->publisherModel->show($transaction['publisher_id']):null;
+            $transaction['staff'] = $this->userModel->show($transaction['staff_id']);
+            $transaction['asongan'] = !empty($transaction['user_id'])?$this->userModel->show($transaction['user_id']):null;
+        }
+
         return $this->sendSuccess($transactions,'',200);
     }
 
@@ -37,7 +52,14 @@ class Transaction extends BaseController
     {   
         $transactionModel = new TransactionModel(); 
         $transaction = $transactionModel->show($id);
+        $transaction['publisher'] = !empty($transaction['publisher_id']) ? $this->publisherModel->show($transaction['publisher_id']):null;
+        $transaction['staff'] = $this->userModel->show($transaction['staff_id']);
+        $transaction['asongan'] = !empty($transaction['user_id'])?$this->userModel->show($transaction['user_id']):null;
         $transactionDetails = $transactionModel->getTransactionDetails($id);
+
+        foreach($transactionDetails as &$transactionDetail){
+            $transactionDetail['newspaper'] = $this->newspaperModel->show($transactionDetail['newspaper_id']);
+        }
 
         $transaction['details'] = $transactionDetails;
         return $this->sendSuccess($transaction,'',200);
@@ -53,6 +75,7 @@ class Transaction extends BaseController
             $transactionData = [
                 'transaction_code' => $transactionCode,
                 'user_id' => $this->request->getVar('user_id'),
+                'staff_id' => $this->request->getVar('staff_id'),
                 'publisher_id' => $this->request->getVar('publisher_id'),
                 'total_price' => $this->request->getVar('total_price'),
                 'payment_status' => "unpaid",

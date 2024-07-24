@@ -21,6 +21,7 @@ class TransactionTable extends Migration
             'user_id' => [
                 'type'           => 'INT',
                 'unsigned'       => true,
+                'null'           => true,
             ],
             'staff_id' => [
                 'type'           => 'INT',
@@ -29,6 +30,7 @@ class TransactionTable extends Migration
             'publisher_id' => [
                 'type'           => 'INT',
                 'unsigned'       => true,
+                'null'           => true,
             ],
             'total_price' => [
                 'type'           => 'VARCHAR',

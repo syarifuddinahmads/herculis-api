@@ -5,11 +5,20 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
 use App\Models\NewspaperModel;
+use App\Models\PublisherModel;
 use Exception;
 
 class Newspaper extends BaseController
 {
+    private $newspaperModel;
+    private $publisherModel;
     use ResponseAPIHelper;
+
+    function __construct()
+    {
+        $this->newspaperModel = new NewspaperModel();
+        $this->publisherModel = new PublisherModel();
+    }
     
     public function index()
     {
@@ -17,12 +26,14 @@ class Newspaper extends BaseController
 
             $publisherId = $this->request->getVar('publisher_id');
 
-            $model = new NewspaperModel();
-
             if(!empty($publisherId)){
-                $data = $model->where('publisher_id',$publisherId)->orderBy('id', 'DESC')->findAll();
+                $data = $this->newspaperModel->where('publisher_id',$publisherId)->orderBy('id', 'DESC')->findAll();
             }else{
-                $data = $model->orderBy('id', 'DESC')->findAll();
+                $data = $this->newspaperModel->orderBy('id', 'DESC')->findAll();
+                foreach($data as &$val){
+                    $publisher = $this->publisherModel->show($val['publisher_id']);
+                    $val['publisher'] = $publisher;
+                }
             }
            
             return $this->sendSuccess($data,'',200);
@@ -39,10 +50,10 @@ class Newspaper extends BaseController
                 'name' => $this->request->getVar('name'),
                 'publisher_id'  => $this->request->getVar('publisher_id'),
                 'price'  => $this->request->getVar('price'),
+                'description'=> $this->request->getVar('description')
             ];
 
-            $model = new NewspaperModel();
-            $model->insert($data);
+            $this->newspaperModel->insert($data);
 
             return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
         }catch(Exception $ex){
@@ -52,8 +63,7 @@ class Newspaper extends BaseController
    
     public function show($id = null)
     {
-        $model = new NewspaperModel();
-        $data = $model->where('id', $id)->first();
+        $data = $this->newspaperModel->where('id', $id)->first();
         if ($data) {
             return $this->sendSuccess($data);
         } else {
@@ -64,14 +74,13 @@ class Newspaper extends BaseController
     public function update($id = null)
     {
         try{
-
-            $model = new NewspaperModel();
             $data = [
                 'name' => $this->request->getVar('name'),
                 'publisher_id'  => $this->request->getVar('publisher_id'),
                 'price'  => $this->request->getVar('price'),
+                'description'=> $this->request->getVar('description')
             ];
-            $model->update($id, $data);
+            $this->newspaperModel->update($id, $data);
 
             return $this->sendSuccess(null,'Data berhasil diupdate.',200);
         }catch(Exception $ex){
@@ -82,11 +91,10 @@ class Newspaper extends BaseController
     public function delete($id = null)
     {
         try{
-            
-            $model = new NewspaperModel();
-            $data = $model->where('id', $id)->first();
+        
+            $data =$this->newspaperModel->where('id', $id)->first();
             if (!empty($data)) {
-                $model->where('id', $id)->delete();
+                $this->newspaperModel->where('id', $id)->delete();
                 return $this->sendSuccess(null,'Data berhasil dihapus !',200);
             } else {
                 return $this->sendError('Data tidak ditemukan.');
