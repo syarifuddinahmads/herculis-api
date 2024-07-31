@@ -25,13 +25,14 @@ class Register extends BaseController
                 'email' => $this->request->getVar('email'),
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
+                'user_type_id' => 5
             ];
 
             $db = $this->userModel->insert($insert);
 
             if ($db) {
                 $user = $this->userModel->where('id', $this->userModel->getInsertID())->first();
-                return $this->sendSuccess(['user' => $user], 'Registrasi user berhasil !');
+                return $this->sendSuccess(['user' => $user], 'Registrasi user berhasil !',200);
             }
 
             return $this->sendError('Registrasi user gagal !');
