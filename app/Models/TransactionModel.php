@@ -83,7 +83,7 @@ class TransactionModel extends Model
             $builder->where('payment_status', $paymentStatus);
         }
 
-        return $builder->get()->getResultArray();
+        return $builder->orderBy('date_transaction','desc')->get()->getResultArray();
     }
 
     public function show($id)
