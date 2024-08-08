@@ -49,6 +49,11 @@ class TransactionTable extends Migration
                 'unsigned'       => true,
                 'null'           => true,
             ],
+            'note' => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 255,
+                'null'           => true,
+            ],
             'date_transaction datetime default current_timestamp',
             'created_at datetime default current_timestamp',
             'updated_at datetime default current_timestamp on update current_timestamp'

@@ -80,6 +80,7 @@ class Transaction extends BaseController
                 'total_price' => $this->request->getVar('total_price'),
                 'payment_status' => "unpaid",
                 'type_transaction'=> $this->request->getVar('type_transaction'),
+                'note' => $this->request->getVar('note'),
             ];
 
             $transaction = new TransactionModel();
