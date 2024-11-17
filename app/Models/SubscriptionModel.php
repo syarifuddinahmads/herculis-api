@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class SubscriptionModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'subscriptions';
+    protected $table            = 'subscription';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
@@ -38,4 +38,9 @@ class SubscriptionModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function show($id)
+    {
+        return $this->find($id);
+    }
 }
