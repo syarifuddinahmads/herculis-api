@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
 use App\Models\NewspaperModel;
+use App\Models\PublisherModel;
 use App\Models\SubscriptionModel;
 use App\Models\UserModel;
 use Exception;
@@ -16,12 +17,14 @@ class Subscription extends BaseController
     private $subscriptionModel;
     private $userModel;
     private $newspaperModel;
+    private $publisherModel;
 
     public function __construct()
     {
         $this->subscriptionModel = new SubscriptionModel();
         $this->userModel = new UserModel();
         $this->newspaperModel = new NewspaperModel();
+        $this->publisherModel = new PublisherModel();
     }
 
     public function index()
@@ -29,7 +32,9 @@ class Subscription extends BaseController
         try {
             $subscriptions = $this->subscriptionModel->orderBy('id', 'DESC')->findAll();
             foreach ($subscriptions as &$subs) {
-                $subs['newspaper'] = $this->newspaperModel->show($subs['newspaper_id']);
+                $newspaper = $this->newspaperModel->show($subs['newspaper_id']);
+                $newspaper['publisher'] = $this->publisherModel->show($newspaper['publisher_id']);
+                $subs['newspaper'] = $newspaper;
                 $subs['user'] = $this->userModel->show($subs['user_id']);
             }
 
@@ -59,6 +64,10 @@ class Subscription extends BaseController
     {
         try {
             $data = $this->subscriptionModel->where('id', $id)->first();
+            $newspaper = $this->newspaperModel->show($data['newspaper_id']);
+            $newspaper['publisher'] = $this->publisherModel->show($newspaper['publisher_id']);
+            $data['newspaper'] = $newspaper;
+            $data['user'] = $this->userModel->show($data['user_id']);
 
             if ($data) {
                 return $this->sendSuccess($data);
