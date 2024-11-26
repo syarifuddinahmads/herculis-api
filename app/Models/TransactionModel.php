@@ -23,7 +23,8 @@ class TransactionModel extends Model
         'payment_status',
         'payment_id',
         'date_transaction',
-        'type_transaction'
+        'type_transaction',
+        'note'
     ];
 
     // Dates
