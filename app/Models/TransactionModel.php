@@ -21,7 +21,7 @@ class TransactionModel extends Model
         'publisher_id',
         'total_price',
         'payment_status',
-        'payment_id',
+        // 'payment_id',
         'date_transaction',
         'type_transaction',
         'note'
@@ -57,34 +57,39 @@ class TransactionModel extends Model
             ->where('transaction_id', $id)
             ->get()->getResultArray();
     }
-    
-    public function last() {
+
+    public function last()
+    {
         $builder = $this->db->table('transaction');
         $builder->select('id, transaction_code');
-        $builder->whereIn('id', function(BaseBuilder $builder) {
+        $builder->whereIn('id', function (BaseBuilder $builder) {
             $builder->select('MAX(id)', false)
-                    ->from('transaction');
+                ->from('transaction');
         });
         $query = $builder->get()->getRow();
         return $query;
     }
 
-    public function index($fromDate = null, $toDate = null, $transactionType = null, $paymentStatus = null)
+    public function index($search = null, $fromDate = null, $toDate = null, $transactionType = null, $paymentStatus = null)
     {
         $builder = $this->db->table('transaction');
 
+        if ($search !== null) {
+            $builder->like('transaction_code', $search);
+        }
+
         if ($fromDate !== null && $toDate !== null) {
             $builder->where('date_transaction >=', $fromDate)
-                    ->where('date_transaction <=', $toDate);
+                ->where('date_transaction <=', $toDate);
         }
         if ($transactionType !== null) {
-            $builder->where('transaction_type', $transactionType);
+            $builder->where('type_transaction', $transactionType);
         }
         if ($paymentStatus !== null) {
             $builder->where('payment_status', $paymentStatus);
         }
 
-        return $builder->orderBy('date_transaction','desc')->get()->getResultArray();
+        return $builder->orderBy('date_transaction', 'desc')->get()->getResultArray();
     }
 
     public function show($id)

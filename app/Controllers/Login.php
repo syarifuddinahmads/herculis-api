@@ -25,27 +25,28 @@ class Login extends BaseController
     {
         try {
             $user  = $this->userModel->where('email', $this->request->getVar('email'))->first();
+            // dd(...$user);
             if ($user) {
                 if (password_verify($this->request->getVar('password'), $user['password'])) {
                     $jwt = new JWTLibrary;
+                    dd($jwt->token());
                     $token = $jwt->token();
 
-                   
                     $userType = $this->userTypeModel->show($user['user_type_id']);
                     $user['user_type'] = $userType;
 
                     $data = [
                         'token' => $token,
                         'user' => $user,
-                        'user_type'=>$userType
+                        'user_type' => $userType
                     ];
 
                     return $this->sendSuccess($data, 'Login Berhasil !', 200);
                 } else {
-                    return $this->sendError('Login Gagal, Email atau password salah !', null,403);
+                    return $this->sendError('Login Gagal, Email atau password salah !', null, 403);
                 }
             } else {
-                return $this->sendError('Login Gagal, User tidak ditemukan !', null,403);
+                return $this->sendError('Login Gagal, User tidak ditemukan !', null, 403);
             }
         } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());

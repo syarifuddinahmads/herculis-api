@@ -44,11 +44,11 @@ class TransactionTable extends Migration
                 'type'           => 'VARCHAR',
                 'constraint'     => 50,
             ],
-            'payment_id' => [
-                'type'           => 'INT',
-                'unsigned'       => true,
-                'null'           => true,
-            ],
+            // 'payment_id' => [
+            //     'type'           => 'INT',
+            //     'unsigned'       => true,
+            //     'null'           => true,
+            // ],
             'note' => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 255,

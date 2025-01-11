@@ -13,7 +13,7 @@ use CodeIgniter\Log\Logger;
 use Exception;
 
 class Transaction extends BaseController
-{   
+{
     use ResponseAPIHelper;
 
     private $publisherModel;
@@ -24,45 +24,46 @@ class Transaction extends BaseController
     public function __construct()
     {
         $this->db = \Config\Database::connect(); // Load the database library manually
-        $this->userModel= new UserModel();
+        $this->userModel = new UserModel();
         $this->publisherModel = new PublisherModel();
         $this->newspaperModel = new NewspaperModel();
     }
-    
+
     public function index()
     {
+        $search = $this->request->getVar('search');
         $fromDate = $this->request->getVar('from_date');
         $toDate = $this->request->getVar('to_date');
         $transactionType = $this->request->getVar('transaction_type');
         $paymentStatus = $this->request->getVar('payment_status');
+        // dd($this->request->getVar("transaction_type"));
+        $transactionModel = new TransactionModel();
+        $transactions = $transactionModel->index($search, $fromDate, $toDate, $transactionType, $paymentStatus);
 
-        $transactionModel = new TransactionModel(); 
-        $transactions = $transactionModel->index($fromDate, $toDate, $transactionType, $paymentStatus);
-
-        foreach($transactions as &$transaction){
-            $transaction['publisher'] = !empty($transaction['publisher_id']) ? $this->publisherModel->show($transaction['publisher_id']):null;
+        foreach ($transactions as &$transaction) {
+            $transaction['publisher'] = !empty($transaction['publisher_id']) ? $this->publisherModel->show($transaction['publisher_id']) : null;
             $transaction['staff'] = $this->userModel->show($transaction['staff_id']);
-            $transaction['asongan'] = !empty($transaction['user_id'])?$this->userModel->show($transaction['user_id']):null;
+            $transaction['asongan'] = !empty($transaction['user_id']) ? $this->userModel->show($transaction['user_id']) : null;
         }
 
-        return $this->sendSuccess($transactions,'',200);
+        return $this->sendSuccess($transactions, '', 200);
     }
 
     public function show($id)
-    {   
-        $transactionModel = new TransactionModel(); 
+    {
+        $transactionModel = new TransactionModel();
         $transaction = $transactionModel->show($id);
-        $transaction['publisher'] = !empty($transaction['publisher_id']) ? $this->publisherModel->show($transaction['publisher_id']):null;
+        $transaction['publisher'] = !empty($transaction['publisher_id']) ? $this->publisherModel->show($transaction['publisher_id']) : null;
         $transaction['staff'] = $this->userModel->show($transaction['staff_id']);
-        $transaction['asongan'] = !empty($transaction['user_id'])?$this->userModel->show($transaction['user_id']):null;
+        $transaction['asongan'] = !empty($transaction['user_id']) ? $this->userModel->show($transaction['user_id']) : null;
         $transactionDetails = $transactionModel->getTransactionDetails($id);
 
-        foreach($transactionDetails as &$transactionDetail){
+        foreach ($transactionDetails as &$transactionDetail) {
             $transactionDetail['newspaper'] = $this->newspaperModel->show($transactionDetail['newspaper_id']);
         }
 
         $transaction['details'] = $transactionDetails;
-        return $this->sendSuccess($transaction,'',200);
+        return $this->sendSuccess($transaction, '', 200);
     }
 
     public function create()
@@ -79,7 +80,7 @@ class Transaction extends BaseController
                 'publisher_id' => $this->request->getVar('publisher_id'),
                 'total_price' => $this->request->getVar('total_price'),
                 'payment_status' => "unpaid",
-                'type_transaction'=> $this->request->getVar('type_transaction'),
+                'type_transaction' => $this->request->getVar('type_transaction'),
                 'note' => $this->request->getVar('note'),
             ];
 
@@ -104,10 +105,45 @@ class Transaction extends BaseController
             $transactionDetail->insertBatch($transactionDetailData);
 
             $this->db->transCommit();
-
             return $this->sendSuccess(null, 'Data berhasil ditambahkan.', 201);
         } catch (Exception $ex) {
             $this->db->transRollback();
+            return $this->sendError($ex->getMessage());
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $transactionModel = new TransactionModel();
+            $transaction = $transactionModel->where('id', $id)->first();
+            if (!empty($transaction)) {
+                $transactionModel->delete($id);
+                return $this->sendSuccess(null, 'Data berhasil dihapus.', 201);
+            } else {
+                return $this->sendError("Data tidak ditemukan");
+            }
+        } catch (Exception $ex) {
+            return $this->sendError($ex->getMessage());
+        }
+    }
+
+    public function update($id = null)
+    {
+        try {
+            $transactionModel = new TransactionModel();
+            $data = [
+                'user_id' => $this->request->getVar('user_id'),
+                'staff_id' => $this->request->getVar('staff_id'),
+                'publisher_id' => $this->request->getVar('publisher_id'),
+                'total_price' => $this->request->getVar('total_price'),
+                'payment_status' => "unpaid",
+                'type_transaction' => $this->request->getVar('type_transaction'),
+                'note' => $this->request->getVar('note'),
+            ];
+            $transactionModel->update($id, $data);
+            return $this->sendSuccess(null, 'Data berhasil diupdate.', 200);
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
         }
     }
@@ -124,17 +160,16 @@ class Transaction extends BaseController
     {
         $transaction = new TransactionModel();
         $lastTransaction = $transaction->last();
-        
-        if($lastTransaction){
+
+        if ($lastTransaction) {
             $parts = explode('/', $lastTransaction->transaction_code);
             $lastPart = end($parts);
-            
+
             $trxCode = str_pad((int)$lastPart + 1, strlen($lastPart), '0', STR_PAD_LEFT);
-        }else{
+        } else {
             $trxCode = "00001";
-        }   
+        }
 
         return $trxCode;
-
     }
 }

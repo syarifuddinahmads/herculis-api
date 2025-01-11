@@ -4,20 +4,19 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PaymentModel extends Model
+class ReceivedDetailModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'payment';
+    protected $table            = 'received_detail';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'type_payment',
-        'transaction_id',
-        'date_payment',
-        'status_payment'
+        'received_id',
+        'transaction_detail_id',
+        'quantity',
     ];
 
     // Dates
@@ -43,14 +42,4 @@ class PaymentModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function index($fromDate = null, $toDate = null)
-    {
-        $builder = $this->db->table('payment');
-        if ($fromDate !== null && $toDate !== null) {
-            $builder->where('date_payment >=', $fromDate)
-                ->where('date_payment <=', $toDate);
-        }
-        return $builder->orderBy('date_payment', 'desc')->get()->getResultArray();
-    }
 }

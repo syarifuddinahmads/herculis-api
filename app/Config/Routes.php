@@ -38,8 +38,8 @@ $routes->group('api/v1', ["filter" => 'cors'],  function ($routes) {
     $routes->group('auth', [], function ($routes) {
         $routes->post('login', 'Login::login');
         $routes->post('register', 'Register::create');
-        $routes->post('request-reset-password','ForgotPassword::requestResetPassword');
-        $routes->post('update-new-password','ForgotPassword::updateNewPassword');
+        $routes->post('request-reset-password', 'ForgotPassword::requestResetPassword');
+        $routes->post('update-new-password', 'ForgotPassword::updateNewPassword');
     });
 
     $routes->group('', ["filter" => 'auth'],  function ($routes) {
@@ -50,8 +50,10 @@ $routes->group('api/v1', ["filter" => 'cors'],  function ($routes) {
         $routes->resource('subscription');
         $routes->resource('newspaper');
         $routes->resource('newspaperprice');
-        $routes->resource('transaction');      
-        $routes->resource('retur');      
+        $routes->resource('payment');
+        $routes->resource('transaction');
+        $routes->resource('received');
+        $routes->resource('retur');
     });
 });
 

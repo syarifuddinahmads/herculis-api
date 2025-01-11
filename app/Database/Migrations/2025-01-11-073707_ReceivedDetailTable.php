@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class PaymentTable extends Migration
+class ReceivedDetailTable extends Migration
 {
     public function up()
     {
@@ -14,31 +14,28 @@ class PaymentTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'type_payment' => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 150,
-            ],
-            'transaction_id' => [
+            'received_id' => [
                 'type'           => 'INT',
                 'unsigned'       => true,
             ],
-            'date_payment' => [
-                'type'           => 'DATETIME',
+            'transaction_detail_id' => [
+                'type'           => 'INT',
+                'unsigned'       => true,
             ],
-            'status_payment' => [
-                'type'           => 'VARCHAR',
-                'constraint'     => 50,
+            'quantity' => [
+                'type'           => 'INT',
+                'default'        => 0
             ],
             'created_at datetime default current_timestamp',
             'updated_at datetime default current_timestamp on update current_timestamp'
         ];
         $this->forge->addField($field);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('payment');
+        $this->forge->createTable('received_detail');
     }
 
     public function down()
     {
-        $this->forge->dropTable('payment');
+        $this->forge->dropTable('received_detail');
     }
 }
