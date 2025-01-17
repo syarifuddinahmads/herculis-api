@@ -22,7 +22,7 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Staff Pembelian',
                 'email' => 'staff-buy@mail.com',
-                'password' => password_hash('password456', PASSWORD_DEFAULT),
+                'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'address' => '456 Elm St, Anytown, USA',
                 'no_telp' => '987-654-3210',
                 'nik_image' => '-',
@@ -32,7 +32,7 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Staff Penjualan',
                 'email' => 'staff-sales@mail.com',
-                'password' => password_hash('password456', PASSWORD_DEFAULT),
+                'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'address' => '456 Elm St, Anytown, USA',
                 'no_telp' => '987-654-3210',
                 'nik_image' => '-',
@@ -42,7 +42,7 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Asongan',
                 'email' => 'asongan@mail.com',
-                'password' => password_hash('password456', PASSWORD_DEFAULT),
+                'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'address' => '456 Elm St, Anytown, USA',
                 'no_telp' => '987-654-3210',
                 'nik_image' => '-',
@@ -52,7 +52,7 @@ class UserTableSeeder extends Seeder
             [
                 'name' => 'Customer',
                 'email' => 'customer@mail.com',
-                'password' => password_hash('password456', PASSWORD_DEFAULT),
+                'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'address' => '456 Elm St, Anytown, USA',
                 'no_telp' => '987-654-3210',
                 'nik_image' => '-',

@@ -29,7 +29,7 @@ class Login extends BaseController
             if ($user) {
                 if (password_verify($this->request->getVar('password'), $user['password'])) {
                     $jwt = new JWTLibrary;
-                    dd($jwt->token());
+                    // dd($jwt->token());
                     $token = $jwt->token();
 
                     $userType = $this->userTypeModel->show($user['user_type_id']);
