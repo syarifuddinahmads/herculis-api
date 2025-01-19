@@ -29,6 +29,12 @@ class PaymentTable extends Migration
                 'type'           => 'VARCHAR',
                 'constraint'     => 50,
             ],
+            'note' => [
+                'type'           => 'TEXT',
+            ],
+            'image' => [
+                'type'           => 'TEXT',
+            ],
             'created_at datetime default current_timestamp',
             'updated_at datetime default current_timestamp on update current_timestamp'
         ];
