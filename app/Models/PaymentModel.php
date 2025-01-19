@@ -17,7 +17,9 @@ class PaymentModel extends Model
         'type_payment',
         'transaction_id',
         'date_payment',
-        'status_payment'
+        'status_payment',
+        'note',
+        'image'
     ];
 
     // Dates
