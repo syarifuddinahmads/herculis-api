@@ -5,7 +5,9 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
 use App\Models\PaymentModel;
+use App\Models\PublisherModel;
 use App\Models\TransactionModel;
+use App\Models\UserModel;
 use Exception;
 
 class Payment extends BaseController
@@ -13,6 +15,8 @@ class Payment extends BaseController
     use ResponseAPIHelper;
     private $transaction;
     private $payment;
+    private $userModel;
+    private $publisherModel;
     protected $db; // Define the property
 
     public function __construct()
@@ -20,6 +24,8 @@ class Payment extends BaseController
         $this->db = \Config\Database::connect();
         $this->payment = new PaymentModel();
         $this->transaction = new TransactionModel();
+        $this->userModel = new UserModel();
+        $this->publisherModel = new PublisherModel();
     }
     public function index()
     {
@@ -28,6 +34,9 @@ class Payment extends BaseController
         $payments = $this->payment->index($fromDate, $toDate);
         foreach ($payments as &$payment) {
             $payment['transaction'] = !empty($payment['transaction_id']) ? $this->transaction->show($payment['transaction_id']) : null;
+            $payment['transaction']['publisher'] = !empty($transaction['publisher_id']) ? $this->publisherModel->show($payment['transaction']['publisher_id']) : null;
+            $payment['transaction']['staff'] = $this->userModel->show($payment['transaction']['staff_id']);
+            $payment['transaction']['asongan'] = !empty($transaction['user_id']) ? $this->userModel->show($$payment['transaction']['user_id']) : null;
         }
         return $this->sendSuccess($payments, '', 200);
     }
