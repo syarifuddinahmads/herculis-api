@@ -21,7 +21,6 @@ class TransactionModel extends Model
         'publisher_id',
         'total_price',
         'payment_status',
-        // 'payment_id',
         'date_transaction',
         'type_transaction',
         'note'

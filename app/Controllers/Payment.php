@@ -5,7 +5,9 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Helpers\ResponseAPIHelper;
 use App\Models\PaymentModel;
+use App\Models\PublisherModel;
 use App\Models\TransactionModel;
+use App\Models\UserModel;
 use Exception;
 
 class Payment extends BaseController
@@ -13,6 +15,8 @@ class Payment extends BaseController
     use ResponseAPIHelper;
     private $transaction;
     private $payment;
+    private $userModel;
+    private $publisherModel;
     protected $db; // Define the property
 
     public function __construct()
@@ -20,6 +24,8 @@ class Payment extends BaseController
         $this->db = \Config\Database::connect();
         $this->payment = new PaymentModel();
         $this->transaction = new TransactionModel();
+        $this->userModel = new UserModel();
+        $this->publisherModel = new PublisherModel();
     }
     public function index()
     {
@@ -28,6 +34,9 @@ class Payment extends BaseController
         $payments = $this->payment->index($fromDate, $toDate);
         foreach ($payments as &$payment) {
             $payment['transaction'] = !empty($payment['transaction_id']) ? $this->transaction->show($payment['transaction_id']) : null;
+            $payment['transaction']['publisher'] = !empty($transaction['publisher_id']) ? $this->publisherModel->show($payment['transaction']['publisher_id']) : null;
+            $payment['transaction']['staff'] = $this->userModel->show($payment['transaction']['staff_id']);
+            $payment['transaction']['asongan'] = !empty($transaction['user_id']) ? $this->userModel->show($$payment['transaction']['user_id']) : null;
         }
         return $this->sendSuccess($payments, '', 200);
     }
@@ -50,15 +59,46 @@ class Payment extends BaseController
                 $this->db->transRollback();
                 return $this->sendError("Data Transaksi tidak ditemukan");
             }
+
+            // Handle file upload
+            $file = $this->request->getFile('imageFile');
+            if ($file && $file->isValid()) {
+                // Validate file type and size
+                if (!$file->isValid() || $file->hasMoved()) {
+                    throw new Exception("File tidak valid atau sudah dipindahkan.");
+                }
+                if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/jpg'])) {
+                    throw new Exception("Format file harus berupa JPG atau PNG.");
+                }
+                if ($file->getSize() > 2048000) { // Max 2MB
+                    throw new Exception("Ukuran file maksimal 2MB.");
+                }
+
+                // Move file to the uploads directory
+                $filePath = WRITEPATH . 'uploads/images/';
+                if (!is_dir($filePath)) {
+                    mkdir($filePath, 0777, true);
+                }
+                $newName = $file->getRandomName();
+                $file->move($filePath, $newName);
+            } else {
+                throw new Exception("Gambar tidak ditemukan atau tidak valid.");
+            }
+
+            // Prepare data for insertion
             $data = [
                 'type_payment' => $this->request->getVar('type_payment'),
-                'transaction_id'  => $this->request->getVar('transaction_id'),
-                'status_payment'  => $this->request->getVar('status_payment'),
-                'date_payment' => $this->request->getVar('date_payment')
+                'transaction_id' => $this->request->getVar('transaction_id'),
+                'status_payment' => $this->request->getVar('status_payment'),
+                'date_payment' => $this->request->getVar('date_payment'),
+                'note' => $this->request->getVar('note'),
+                'image' => 'uploads/images/' . $newName // Save relative path to database
             ];
             $transaction['payment_status'] = "paid";
+
             $this->payment->insert($data);
             $this->transaction->update($transaction['id'], $transaction);
+
             $this->db->transCommit();
             return $this->sendSuccess(null, 'Data berhasil ditambahkan.', 201);
         } catch (Exception $ex) {
@@ -66,6 +106,7 @@ class Payment extends BaseController
             return $this->sendError($ex->getMessage());
         }
     }
+
     public function update($id = null)
     {
         try {
