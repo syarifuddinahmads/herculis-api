@@ -51,6 +51,7 @@ $routes->group('api/v1', ["filter" => 'cors'],  function ($routes) {
         $routes->resource('newspaper');
         $routes->resource('newspaperprice');
         $routes->resource('payment');
+        $routes->resource('dashboard');
         $routes->resource('transaction');
         $routes->resource('requestkuota');
         $routes->resource('received');

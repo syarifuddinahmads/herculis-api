@@ -96,4 +96,21 @@ class TransactionModel extends Model
     {
         return $this->find($id);
     }
+
+    public function getHutang($id = null)
+    {
+        $builder = $this->db->table('transaction');
+        if (empty($id)) {
+            $result = $builder->groupBy('user_id')->select("user_id")->selectSum('total_price')
+                ->where('payment_status', 'unpaid')->where('type_transaction', 'pembelian')
+                ->get()->getResultArray();
+            return $result;
+        } else {
+            $result = $builder->groupBy('user_id')->select("user_id")
+                ->where('payment_status', 'unpaid')->where('type_transaction', 'pembelian')
+                ->where('user_id', $id)
+                ->selectSum('total_price')->get()->getResultArray();
+            return $result;
+        }
+    }
 }

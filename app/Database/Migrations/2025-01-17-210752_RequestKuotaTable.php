@@ -28,6 +28,11 @@ class RequestKuotaTable extends Migration
                 'constraint'     => 255,
                 'null'           => true,
             ],
+            'status' => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 50,
+                'default'        => 'pending',
+            ],
             'status_payment' => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 50,

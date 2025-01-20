@@ -11,6 +11,8 @@ use App\Models\UserModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use Exception;
 
+use function PHPUnit\Framework\isNull;
+
 class RequestKuota extends BaseController
 {
     protected $db;
@@ -31,8 +33,10 @@ class RequestKuota extends BaseController
     {
         $fromDate = $this->request->getVar('from_date');
         $toDate = $this->request->getVar('to_date');
+        $status = $this->request->getVar('status');
         $paymentStatus = $this->request->getVar('payment_status');
-        $requestKuotas = $this->requestKuotaModel->index($fromDate, $toDate, $paymentStatus);
+        $asongan = $this->request->getVar('asongan_id');
+        $requestKuotas = $this->requestKuotaModel->index($fromDate, $toDate, $paymentStatus, $status);
         foreach ($requestKuotas as &$requestKuota) {
             $requestKuota['asongan'] = !empty($requestKuota['user_id']) ? $this->userModel->show($requestKuota['user_id']) : null;
         }
@@ -71,6 +75,25 @@ class RequestKuota extends BaseController
         }
     }
 
+    public function createDetail()
+    {
+        $this->db->transStart();
+        try {
+            $detail = [
+                'requestKuota_id' => $this->request->getVar('requestKuota_id'),
+                'newspaper_id' => $this->request->getVar('newspaper_id'),
+                'price' => $this->request->getVar('price'),
+                'quantity' => $this->request->getVar('quantity'),
+            ];
+            $this->requestKuotaDetailModel->insert($detail);
+            $this->db->transCommit();
+            return $this->sendSuccess(null, 'Data berhasil ditambahkan.', 201);
+        } catch (Exception $ex) {
+            $this->db->transRollback();
+            return $this->sendError($ex->getMessage());
+        }
+    }
+
     public function show($id)
     {
         $data = $this->requestKuotaModel->show($id);
@@ -81,5 +104,87 @@ class RequestKuota extends BaseController
         }
         $data['details'] = $details;
         return $this->sendSuccess($data, '', 200);
+    }
+
+    public function update($id = null)
+    {
+        try {
+            $requestKuota = [
+                'user_id' => $this->request->getVar('user_id'),
+                'total' => $this->request->getVar('total'),
+                'note' => $this->request->getVar('note'),
+                'status_payment' => $this->request->getVar('status_payment')
+            ];
+            $this->requestKuotaModel->update($id, $requestKuota);
+            return $this->sendSuccess(null, 'Data berhasil diupdate.', 200);
+        } catch (Exception $ex) {
+            return $this->sendError($ex->getMessage());
+        }
+    }
+
+    public function updateDetail($id = null)
+    {
+        $this->db->transStart();
+        try {
+            $detail = [
+                'requestKuota_id' => $this->request->getVar('requestKuota_id'),
+                'newspaper_id' => $this->request->getVar('newspaper_id'),
+                'price' => $this->request->getVar('price'),
+                'quantity' => $this->request->getVar('quantity'),
+            ];
+            if (isNull($id)) {
+                $this->requestKuotaDetailModel->insert($detail);
+            } else {
+                $this->requestKuotaDetailModel->update($id, $detail);
+            }
+            $this->db->transCommit();
+            return $this->sendSuccess(null, 'Data berhasil diupdate.', 201);
+        } catch (Exception $ex) {
+            $this->db->transRollback();
+            return $this->sendError($ex->getMessage());
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $data = $this->requestKuotaModel->show($id);
+            if (!empty($data)) {
+                $this->requestKuotaModel->delete($id);
+                return $this->sendSuccess(null, 'Data berhasil dihapus.', 201);
+            } else {
+                return $this->sendError("Data tidak ditemukan");
+            }
+        } catch (Exception $ex) {
+            return $this->sendError($ex->getMessage());
+        }
+    }
+    public function deleteDetail($id)
+    {
+        try {
+            $data = $this->requestKuotaDetailModel->find($id);
+            if (!empty($data)) {
+                $this->requestKuotaDetailModel->delete($id);
+                return $this->sendSuccess(null, 'Data berhasil dihapus.', 201);
+            } else {
+                return $this->sendError("Data tidak ditemukan");
+            }
+        } catch (Exception $ex) {
+            return $this->sendError($ex->getMessage());
+        }
+    }
+
+    public function approve($id)
+    {
+        try {
+            $data = $this->requestKuotaModel->show($id);
+            if (!empty($data)) {
+                $data['status'] = "approved";
+                $this->requestKuotaModel->update($id, $data);
+            }
+            return $this->sendSuccess(null, 'Data berhasil di approved.', 200);
+        } catch (Exception $ex) {
+            return $this->sendError($ex->getMessage());
+        }
     }
 }

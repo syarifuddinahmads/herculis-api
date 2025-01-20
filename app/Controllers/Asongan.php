@@ -20,41 +20,42 @@ class Asongan extends BaseController
         $this->userModel = new UserModel();
         $this->userTypeModel = new UserTypeModel();
     }
+    public function piutang() {}
     public function index()
     {
-       try{
+        try {
             $users = $this->userModel->orderBy('id', 'DESC')->findAll();
             foreach ($users as &$user) {
                 $userType = $this->userTypeModel->show($user['user_type_id']);
                 $user['user_type'] = $userType;
             }
-            return $this->sendSuccess($users,'',200);
-       }catch(Exception $ex){
+            return $this->sendSuccess($users, '', 200);
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
-       }
+        }
     }
 
     public function create()
     {
-        try{
+        try {
             $data = [
                 'email' => $this->request->getVar('email'),
                 'password' => password_hash('password123', PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
-                'user_type_id'=>$this->request->getVar('user_type_id'),
-                'no_telp'=>$this->request->getVar('no_telp'),
-                'address'=>$this->request->getVar('address'),
+                'user_type_id' => $this->request->getVar('user_type_id'),
+                'no_telp' => $this->request->getVar('no_telp'),
+                'address' => $this->request->getVar('address'),
             ];
             $this->userModel->insert($data);
-            return $this->sendSuccess(null,'Data berhasil ditambahkan.',201);
-        }catch(Exception $ex){
-            return $this->sendError($ex->getMessage(),null,500);
+            return $this->sendSuccess(null, 'Data berhasil ditambahkan.', 201);
+        } catch (Exception $ex) {
+            return $this->sendError($ex->getMessage(), null, 500);
         }
     }
 
     public function show($id = null)
     {
-        try{
+        try {
             $data = $this->userModel->where('id', $id)->first();
             $userType = $this->userTypeModel->where('id', $data['user_type_id'])->first();
 
@@ -65,42 +66,42 @@ class Asongan extends BaseController
             } else {
                 return $this->sendError('Data tidak ditemukan.');
             }
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
         }
     }
-    
+
     public function update($id = null)
     {
-        try{
+        try {
             $data = [
                 'email' => $this->request->getVar('email'),
                 'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
                 'name' => $this->request->getVar('name'),
-                'user_type_id'=>$this->request->getVar('user_type_id'),
-                'no_telp'=>$this->request->getVar('no_telp'),
-                'address'=>$this->request->getVar('address'),
-                'nik_image'=>$this->request->getVar('nik_image'),
-                'profile_image'=>$this->request->getVar('profile_image'),
+                'user_type_id' => $this->request->getVar('user_type_id'),
+                'no_telp' => $this->request->getVar('no_telp'),
+                'address' => $this->request->getVar('address'),
+                'nik_image' => $this->request->getVar('nik_image'),
+                'profile_image' => $this->request->getVar('profile_image'),
             ];
             $this->userModel->update($id, $data);
-            return $this->sendSuccess(null,'Data berhasil diupdate.',201);
-        }catch(Exception $ex){
+            return $this->sendSuccess(null, 'Data berhasil diupdate.', 201);
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
         }
     }
-    
+
     public function delete($id = null)
     {
-        try{
+        try {
             $data = $this->userModel->where('id', $id)->first();
             if (!empty($data)) {
                 $this->userModel->where('id', $id)->delete();
-                return $this->sendSuccess(null,'Data berhasil dihapus !',200);
+                return $this->sendSuccess(null, 'Data berhasil dihapus !', 200);
             } else {
                 return $this->sendError('Data tidak ditemukan.');
             }
-        }catch(Exception $ex){
+        } catch (Exception $ex) {
             return $this->sendError($ex->getMessage());
         }
     }
